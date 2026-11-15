@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrivateScan</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>PrivateScan</h1>
+    <button id="new-doc-btn" class="primary-btn">New Document</button>
+    <button id="import-doc-btn" class="secondary-btn">Import</button>
+  </header>
+
+  <main id="main-content">
+    <section id="home-screen" class="screen">
+      <div id="doc-list" class="doc-list"></div>
+    </section>
+    <section id="capture-screen" class="screen hidden">
+      <video id="camera-video" autoplay playsinline muted></video>
+      <canvas id="camera-canvas" class="hidden"></canvas>
+      <input type="file" accept="image/*" capture="environment" id="file-input" class="hidden" />
+      <div class="controls">
+        <button id="shutter-btn" class="primary-btn">Scan</button>
+        <button id="cancel-capture-btn" class="secondary-btn">Cancel</button>
+      </div>
+    </section>
+    <section id="crop-screen" class="screen hidden">
+      <div class="crop-container">
+        <canvas id="crop-canvas"></canvas>
+        <svg id="crop-overlay" class="overlay"></svg>
+      </div>
+      <div class="crop-controls">
+        <button id="auto-detect-btn" class="secondary-btn">Auto Detect</button>
+        <button id="reset-corners-btn" class="secondary-btn">Reset</button>
+        <button id="rotate-left-btn" class="secondary-btn">⟲</button>
+        <button id="rotate-right-btn" class="secondary-btn">⟳</button>
+        <button id="retake-btn" class="secondary-btn">Retake</button>
+        <button id="cancel-crop-btn" class="secondary-btn">Cancel</button>
+        <button id="confirm-crop-btn" class="primary-btn">Continue</button>
+      </div>
+    </section>
+    <section id="preview-screen" class="screen hidden">
+      <img id="page-preview" alt="Page preview" />
+      <div class="preview-controls">
+        <button id="reedit-crop-btn" class="secondary-btn">Re‑edit</button>
+        <button id="retake-page-btn" class="secondary-btn">Retake</button>
+        <button id="keep-page-btn" class="primary-btn">Keep Page</button>
+      </div>
+    </section>
+    <section id="document-screen" class="screen hidden">
+      <header>
+        <input type="text" id="doc-title" placeholder="Document title" />
+        <span id="page-count"></span>
+      </header>
+      <div id="page-list" class="page-list"></div>
+      <div class="doc-controls">
+        <button id="scan-next-btn" class="primary-btn">Scan Next Page</button>
+        <button id="export-btn" class="secondary-btn">Export / Share</button>
+        <button id="delete-doc-btn" class="danger-btn">Delete Document</button>
+        <button id="back-home-btn" class="secondary-btn">Back to Home</button>
+      </div>
+    </section>
+    <section id="export-screen" class="screen hidden">
+      <h2>Export / Share</h2>
+      <div class="export-options">
+        <button class="export-btn" data-format="pdf">PDF</button>
+        <button class="export-btn" data-format="jpeg">JPEG</button>
+        <button class="export-btn" data-format="png">PNG</button>
+        <button class="export-btn" data-format="tiff">TIFF</button>
+      </div>
+      <div class="export-controls">
+        <button id="close-export-btn" class="secondary-btn">Close</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/opencv.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
+  <script src="js/db.js" type="module"></script>
+  <script src="js/camera.js" type="module"></script>
+  <script src="js/cropper.js" type="module"></script>
+  <script src="js/processor.js" type="module"></script>
+  <script src="js/export.js" type="module"></script>
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>
