@@ -1,6 +1,6 @@
 // main.js – Entry point that wires UI events and manages screen navigation
 import { startCamera, captureFrame, loadImageFromFile } from './camera.js';
-import { initProcessor, startNewDocument, loadImage, handleShutter, handleFileSelect, confirmCrop, keepPage, autoDetectEdges } from './processor.js';
+import { initProcessor, startNewDocument, handleShutter, handleFileSelect, confirmCrop, keepPage, autoDetectEdges } from './processor.js';
 import { exportDocument } from './export.js';
 import { getDocument, getPagesForDocument, deleteDocument, listDocuments, deletePage, updatePageBlob } from './db.js';
 
@@ -62,14 +62,19 @@ async function loadDocument(docId) {
   showScreen('document-screen');
 }
 
+// Add diagnostics
+console.log('main.js loaded');
+
+// After initProcessor (inside initApp) we'll add later
+
 async function initApp() {
   initProcessor();
-  // Start camera for capture screen (will be shown when needed)
+  console.log('Processor initialized');
   const videoEl = document.getElementById('camera-video');
   videoStream = await startCamera(videoEl);
-
   // Wire UI events
   newDocBtn.addEventListener('click', async () => {
+    console.log('New Document button clicked');
     currentDoc = await startNewDocument();
     sessionStorage.setItem('currentDocId', currentDoc.id);
     docTitleInput.value = currentDoc.title;
@@ -79,17 +84,19 @@ async function initApp() {
   });
 
   importDocBtn.addEventListener('click', () => {
+    console.log('Import button clicked');
     fileInput.click();
   });
 
-  fileInput.addEventListener('change', handleFileSelect);
+  fileInput.addEventListener('change', (e) => {
+    console.log('File input changed');
+    handleFileSelect(e);
+  });
 
   shutterBtn.addEventListener('click', handleShutter);
   cancelCaptureBtn.addEventListener('click', () => showScreen('home-screen'));
 
-  // Crop controls (some are simple wrappers on the Cropper instance inside processor)
-  // For simplicity we expose the cropper via a global variable in processor.js
-  // Assume processor module has exported "cropper" after loadImage – we attach via window
+  // Crop controls
   resetCornersBtn.addEventListener('click', () => {
     if (window.cropper) window.cropper.reset();
   });
@@ -99,9 +106,7 @@ async function initApp() {
   rotateRightBtn.addEventListener('click', () => {
     if (window.cropper) window.cropper.rotateRight();
   });
-  retakeBtn.addEventListener('click', () => {
-    showScreen('capture-screen');
-  });
+  retakeBtn.addEventListener('click', () => showScreen('capture-screen'));
   cancelCropBtn.addEventListener('click', () => showScreen('home-screen'));
   confirmCropBtn.addEventListener('click', confirmCrop);
 
@@ -137,6 +142,7 @@ async function initApp() {
 
   backHomeBtn.addEventListener('click', () => showScreen('home-screen'));
 }
+
 
 async function renderPageThumbnails() {
   if (!currentDoc) return;
